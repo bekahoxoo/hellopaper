@@ -103,7 +103,7 @@ example using the blockhash of a previously mined block
 
 ## Appendices
 
-Hilariously, the appendices are where most of the interesting/essential information is.
+The appendices are where most of the interesting/essential information is.
 There are many of them.
 
 ### Appendix A. Terminology (Page 15)
