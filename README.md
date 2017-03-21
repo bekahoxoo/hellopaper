@@ -1,3 +1,5 @@
+# Hello Paper
+
 I made the yellow paper white and changed the font -- now it's both easier to print and
 a little easier to read. Shout out to Gavin Wood for producing the densest blockchain
 paper in all history.
