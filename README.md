@@ -1,14 +1,13 @@
 # Hello Paper
 
-I made the yellow paper white and changed the font -- now it's both easier to print and
-a little easier to read. Shout out to Gavin Wood for producing the densest blockchain
-paper in all history.
+I made the yellow paper white and changed the font -- now it's both better for printing and
+a little easier to read.
 
 
 This paper could badly do with a table of contents and summary, and so I'll offer the following.
-We're going to skip over _all_ notation because I think it's unnecessary at best.
+We're going to skip over _all_ notation because I think it's unnecessary.
 
-### Section 1, Intro (Page 1)
+### Section 1. Intro (Page 1)
 
 - Blockchains are generally for ensuring security of monetary transfers even when mutually
 distrusting parties are transferring to one another. Ethereum is no different in this respect.
@@ -16,7 +15,7 @@ distrusting parties are transferring to one another. Ethereum is no different in
 programs can be executed alongside monetary transfers.
 - Transparency is preserved.
 
-### Section 2, Blockchain Paradigm (Page 2, first column)
+### Section 2. Blockchain Paradigm (Page 2, first column)
 
 - Ethereum can be viewed as a transaction-based state machine.
 - Genesis block = genesis state.
@@ -27,11 +26,11 @@ programs can be executed alongside monetary transfers.
     - 10^6 Szabo = 1 Ether
     - 10^3 Finney = 1 Ether
 
-### Section 3, Conventions (Page 2, second column)
+### Section 3. Conventions (Page 2, second column)
 
 - Entirely awful notation which we don't need.
 
-### Section 4, Blocks, State and Transactions (Page 3)
+### Section 4. Blocks, State and Transactions (Page 3)
 
 - This is actually a cool section and worth reading (up until we go back to
   state notation).
@@ -41,20 +40,66 @@ programs can be executed alongside monetary transfers.
   'valid state updates result in valid trie updates which result in valid
   blocks'.
 
-### Section 5, Gas and Payment (Page 6)
+### Section 5. Gas and Payment (Page 6)
 
-- Gas is used for the EVM to protect itself against endlessly looping, or malicious
-participants executing functions that take so long the network goes out of sync, and
-acts as a reward to the people who mine the blocks, the same way transaction fees do
-in Bitcoin (and Ethereum!).
+- Gas is used for the EVM to protect itself against endlessly looping, or
+  malicious participants executing functions that take so long the network goes
+  out of sync, and acts as a reward to the people who mine the blocks, the same
+  way transaction fees do in Bitcoin (and Ethereum!).
 - In a transaction, the user can specify:
-    - gasLimit, the upper bound on the amount of gas allowed to be used up in the transaction
-    - gasPrice, the price (in Wei) per 1 unit of gas used (usually sits at something like 0.00000002 Ether/gas, or 200000 Wei/gas, so a normal transaction costs 0.00042 Ether (21000 gas * 0.00000002))
+    - gasLimit, the upper bound on the amount of gas allowed to be used up in
+      the transaction
+    - gasPrice, the price (in Wei) per 1 unit of gas used (usually sits at
+      something like 0.00000002 Ether/gas, or 200000 Wei/gas, so a normal
+      transaction costs 0.00042 Ether (21000 gas * 0.00000002))
 
+### Section 6. Transaction Execution (Page 7)
 
-### Section 6, Transaction Execution (Page 7)
+- Transaction execution checks:
+    - Transaction follows Ethereum's custom encoding properly (specifically, it
+      is 'well-formed RPC, with no additional trailing bytes');
+    - Signature verifies
+    - Transaction nonce is equal to nonce of sender address (eg, nonce = 0 for
+      1st transaction sent from an address -- this is to help prevent replaying
+      transactions to empty an address, and to provide some sort of ordering of
+      transactions, I guess)
+    - Gas limit greater than or equal to gas consumed by transaction (21,000
+      minimum?)
+    - Sender address balance greater than or equal to value of transaction (ie
+      transaction isn't trying to transfer more money than the sender actually
+      has!)
 
+- Execution of valid transaction makes state change! The nonce associated with
+  the sender address is incremented.
+- If gasLimit > actual gas used by transaction, only the amount of gas that is
+  used up by the transaction is taken, and the rest is refunded to the
+  transaction sender.
 
+### Section 7. Contract Creation (Page 8)
+
+Here we use some notation that is introduced in Section 9 (???????), but there
+are some interesting things you mightn't know about contract creation!
+
+### Section 8. Message Call (Page 9)
+
+### Section 9. Execution Model (Page 10)
+
+### Section 10. Blocktree to Blockchain (Page 12)
+
+### Section 11. Block Finalisation (Page 12)
+
+### Section 12. Implementing Contracts (Page 13)
+
+- Explains 'data feeds', which make data from the outside (non-blockchain) world
+available to the Ethereum blockchain. Generally contracts using/offering such data
+feeds are called oracles.
+- Also explains randomness in contracts -- due to the deterministic nature of the EVM,
+there is no urandom or similar. There are ways to get some sort of randomness, for
+example using the blockhash of a previously mined block
+
+### Section 13. Future Directions (Page 14)
+
+- Scalability!! Aahhhh!!
 
 
 # yellowpaper
