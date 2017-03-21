@@ -101,6 +101,41 @@ example using the blockhash of a previously mined block
 
 - Scalability!! Aahhhh!!
 
+## Appendices
+
+Hilariously, the appendices are where most of the interesting/essential information is.
+There are many of them.
+
+### Appendix A. Terminology (Page 15)
+
+### Appendix B. Recursive Length Prefix (Page 15)
+
+- Ethereum's encoding method for arbitrarily structured binary data.
+
+### Appendix C. Hex-Prefix Encoding (Bottom of Page 16)
+
+### Appendix D. Modified Merkle Patricia Tree (Page 17)
+
+### Appendix E. Precompiled Contracts (Page 18)
+
+### Appendix F. Signing Transactions (Bottom of Page 18)
+
+- ECDSA over secp256k1.
+- Unnecessary declarations.
+
+### Appendix G. Fee Schedule (Page 20)
+
+- Prices of executing each of the precompiles/opcodes on the EVM (defined in gas)
+
+### Appendix H. Virtual Machine Specification (Page 20)
+
+- opcodes! Mappings of hex opcodes to explanations of functions.
+
+### Appendix I. Genesis Block (Page 31)
+
+### Appendix J. Ethash (Page 31)
+
+- Ethereum's PoW algo
 
 # yellowpaper
 
