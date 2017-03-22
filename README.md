@@ -1,3 +1,4 @@
+
 # Hello Paper
 
 I made the yellow paper white and changed the font -- now it's both better for printing and
@@ -39,6 +40,104 @@ programs can be executed alongside monetary transfers.
   think about what can and can't occur. The section is pretty much saying
   'valid state updates result in valid trie updates which result in valid
   blocks'.
+
+#### State
+
+The account state comprises the following four fields:
+
+- nonce: A scalar value equal to the number of transactions sent from this
+  address or, in the case of accounts with associated code, the number of
+  contract-creations made by this account.
+- balance: A scalar value equal to the number of Wei owned by this address.
+- storageRoot: A 256-bit hash of the root node of a Merkle Patricia tree that
+  encodes the storage contents of the account (a mapping between 256-bit
+  integer values), encoded into the trie as a mapping from the Keccak 256-bit
+  hash of the 256-bit integer keys to the RLP-encoded 256-bit integer values.
+  (RLP is discussed in Appendix B.)
+- codeHash: The hash of the EVM code of this account—this is the code that gets
+  executed should this address receive a message call; it is immutable and
+  thus, unlike all other fields, cannot be changed after construction. All such
+  code fragments are contained in the state database under their corresponding
+  hashes for later retrieval.
+
+### Transactions
+
+A transaction is signed with the ECDSA private key associated with the address
+from which it originates. In full, the transaction is formed as follows:
+
+- nonce: A scalar value equal to the number of transactions sent by the sender.
+- gasPrice: A scalar value equal to the number of Wei to be paid per unit of
+  gas for all computation costs incurred as a result of the execution of this
+  transaction.
+- gasLimit: A scalar value equal to the maximum amount of gas that should be
+  used in executing this transaction. This is paid up-front, before any
+  computation is done and may not be increased later.
+- to: The 160-bit address of the message call’s recipi- ent or, for a contract
+  creation, 0.
+- value: A scalar value equal to the number of Wei to be transferred to the
+  message call’s recipient or, in the case of contract creation, as an
+  endowment to the newly created account.
+- v, r, s: Values corresponding to the signature of the transaction and used to
+  determine the sender of the transaction.
+
+Additionally, if the transaction is triggering contract creation, we have the following:
+
+- init is an EVM-code fragment; it returns the body,
+a second fragment of code that executes each time the
+account receives a message call (either through a transaction or due to the internal execution of code). init is
+executed only once at account creation and gets discarded
+immediately thereafter.
+
+In contrast, a **message call transaction** contains:
+
+- data: An unlimited size byte array specifying the
+  input data of the message call.
+
+Not noted in this section but absolutely 100% important is that message calls
+are computed locally on the caller's version of the EVM, and so they are
+**private** and consume **no** gas.
+
+(Appendix F specifies the function which maps transactions to the sender, which
+happens through the ECDSA of the SECP-256k1 curve, using the hash of the
+transaction (excepting the latter three signature fields) as the data to be
+signed.
+
+### Blocks
+
+Blocks contain all of the following:
+
+- **parentHash**: The Keccak 256-bit hash of the parent block's header.
+- **ommersHash**: The Keccak 256-bit hash of the ommers (uncles) list portion of this block.
+- **beneficiary**: The 160-bit address to which all mining fees of the given block are transferred.
+- **stateRoot**: The Keccak 256-bit hash of the root node of the state trie, after all transactions are
+executed and finalisations applied.
+- **transactionsRoot**: The Keccak 256-bit hash of the
+root node of the trie structure populated with
+each transaction in the transactions list portion
+of the block.
+- **receiptsRoot**: The Keccak 256-bit hash of the root
+node of the trie structure populated with the receipts of each transaction in the transactions list
+portion of the block.
+- **logsBloom**: The **Bloom filter** composed from indexable information (logger address and log topics) contained in each log entry from the receipt of
+each transaction in the transactions list.
+- **difficulty**: A scalar value corresponding to the difficulty level of this block. This can be calculated
+from the previous block's difficulty level and the
+timestamp.
+- **number**: A scalar value equal to the number of ancestor blocks. The genesis block has a number of zero.
+- **gasLimit**: A scalar value equal to the current limit of gas expenditure per block.
+- **gasUsed**: A scalar value equal to the total gas used in transactions in this block.
+- **timestamp**: A scalar value equal to the reasonable output of Unix's time() at this block's inception.
+- **extraData**: An arbitrary byte array containing
+data relevant to this block. This must be 32 bytes
+or fewer.
+- **mixHash**: A 256-bit hash which proves combined
+with the nonce that a sufficient amount of computation has been carried out on this block.
+- **nonce**: A 64-bit hash which proves combined with
+the mix-hash that a sufficient amount of computation has been carried out on this block.
+
+#### Misc
+
+This section also discusses the construction of the **transaction reciept** and **holistic validity** checks, **serialisation**, and **block header validity** as they apply to Ethereum.
 
 ### Section 5. Gas and Payment (Page 6)
 
@@ -90,12 +189,12 @@ are some interesting things you mightn't know about contract creation!
 
 ### Section 12. Implementing Contracts (Page 13)
 
-- Explains 'data feeds', which make data from the outside (non-blockchain) world
-available to the Ethereum blockchain. Generally contracts using/offering such data
-feeds are called oracles.
-- Also explains randomness in contracts -- due to the deterministic nature of the EVM,
-there is no urandom or similar. There are ways to get some sort of randomness, for
-example using the blockhash of a previously mined block
+- Explains 'data feeds', which make data from the outside (non-blockchain)
+  world available to the Ethereum blockchain. Generally contracts
+  using/offering such data feeds are called oracles.
+- Also explains randomness in contracts -- due to the deterministic nature of
+  the EVM, there is no urandom or similar. There are ways to get some sort of
+  randomness, for example using the blockhash of a previously mined block
 
 ### Section 13. Future Directions (Page 14)
 
@@ -125,7 +224,8 @@ There are many of them.
 
 ### Appendix G. Fee Schedule (Page 20)
 
-- Prices of executing each of the precompiles/opcodes on the EVM (defined in gas)
+- Prices of executing each of the precompiles/opcodes on the EVM (defined in
+  gas)
 
 ### Appendix H. Virtual Machine Specification (Page 20)
 
